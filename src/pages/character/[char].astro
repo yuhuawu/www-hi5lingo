@@ -1,0 +1,15 @@
+---
+export async function getStaticPaths() {
+  const { supabase } = await import('../../lib/supabase');
+  const { data: characters } = await supabase.from('characters').select('char');
+  return (characters || []).map((c) => ({ params: { char: c.char } }));
+}
+
+const { char } = Astro.params;
+
+// Ensure the character is URL encoded for the redirect header
+// "我" -> "%E6%88%91"
+const encodedChar = encodeURIComponent(char || '');
+
+return Astro.redirect(`/en/character/${encodedChar}`);
+---

@@ -1,0 +1,48 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import { languages, defaultLang } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  return Object.keys(languages)
+    .filter(lang => lang !== defaultLang)
+    .map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+
+const posts = (await getCollection('blog'))
+    .filter((post) => post.slug.startsWith(`${lang}/`))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="Blog" lang={lang as any}>
+	<section class="container mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-slate-900 mb-12 text-center">Blog</h1>
+		<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+			{
+				posts.map((post) => (
+					<li>
+						<a href={`/${lang}/blog/${post.slug.replace(new RegExp(`^${lang}/`), '')}/`} class="block group h-full bg-white rounded-xl shadow-sm hover:shadow-md transition border border-slate-100 overflow-hidden">
+							{post.data.heroImage && (
+                                <div class="aspect-video overflow-hidden">
+                                    <img width={720} height={360} src={post.data.heroImage} alt="" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                                </div>
+                            )}
+                            <div class="p-6">
+                                <h4 class="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition mb-2">{post.data.title}</h4>
+                                <p class="text-slate-500 text-sm mb-4">
+                                    <FormattedDate date={post.data.pubDate} />
+                                </p>
+                                <p class="text-slate-600 line-clamp-3">
+                                    {post.data.description}
+                                </p>
+                            </div>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</Layout>

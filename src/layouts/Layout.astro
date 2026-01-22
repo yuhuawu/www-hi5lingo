@@ -16,6 +16,24 @@ const {
 } = Astro.props;
 
 const t = useTranslations(lang as any);
+const currentPath = Astro.url.pathname;
+
+function getLocalizedPath(targetLang: string) {
+	const segments = currentPath.split('/').filter(Boolean);
+	const locales = Object.keys(languages);
+	
+	// If current path starts with a locale, remove it
+	if (locales.includes(segments[0])) {
+		segments.shift();
+	}
+	
+	const cleanPath = segments.join('/');
+	
+	if (targetLang === defaultLang) {
+		return `/${cleanPath}`;
+	}
+	return `/${targetLang}/${cleanPath}`;
+}
 ---
 
 <!doctype html>
@@ -35,16 +53,16 @@ const t = useTranslations(lang as any);
 				<div class="flex items-center space-x-4">
 					<!-- Language Switcher -->
 					<div class="relative group">
-						<button class="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 focus:outline-none">
+						<button class="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 focus:outline-none py-2">
 							<span>{languages[lang as keyof typeof languages]}</span>
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
 							</svg>
 						</button>
-						<div class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 hidden group-hover:block border border-slate-100">
+						<div class="absolute right-0 mt-0 w-32 bg-white rounded-md shadow-lg py-1 hidden group-hover:block border border-slate-100">
 							{Object.entries(languages).map(([l, label]) => (
 								<a 
-									href={`/${l === defaultLang ? '' : l}`} 
+									href={getLocalizedPath(l)}
 									class={`block px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 ${l === lang ? 'font-bold' : ''}`}
 								>
 									{label}
@@ -53,6 +71,7 @@ const t = useTranslations(lang as any);
 						</div>
 					</div>
 
+					<a href={`/${lang === defaultLang ? '' : lang + '/'}blog`} class="hover:text-indigo-600">{t('nav.blog')}</a>
 					<a href="#" class="hover:text-indigo-600">{t('nav.login')}</a>
 					<a href="#" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">{t('nav.get_started')}</a>
 				</div>
@@ -72,7 +91,8 @@ const t = useTranslations(lang as any);
 				<div>
 					<h4 class="text-white font-semibold mb-4">{t('footer.quick_links')}</h4>
 					<ul class="space-y-2">
-						<li><a href="#" class="hover:text-white">{t('footer.home')}</a></li>
+						<li><a href={`/${lang === defaultLang ? '' : lang}`} class="hover:text-white">{t('footer.home')}</a></li>
+						<li><a href={`/${lang === defaultLang ? '' : lang + '/'}blog`} class="hover:text-white">{t('footer.blog')}</a></li>
 						<li><a href="#" class="hover:text-white">{t('footer.pricing')}</a></li>
 						<li><a href="#" class="hover:text-white">{t('nav.login')}</a></li>
 					</ul>

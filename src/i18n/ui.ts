@@ -9,10 +9,12 @@ export const defaultLang = 'en';
 export const ui = {
   en: {
     'nav.login': 'Login',
+    'nav.blog': 'Blog',
     'nav.get_started': 'Get Started',
     'footer.about_desc': 'Master Chinese with confidence.',
     'footer.quick_links': 'Quick Links',
     'footer.home': 'Home',
+    'footer.blog': 'Blog',
     'footer.pricing': 'Pricing',
     'footer.contact': 'Contact',
     'footer.rights': 'All rights reserved.',
@@ -34,10 +36,12 @@ export const ui = {
   },
   'zh-cn': {
     'nav.login': '登录',
+    'nav.blog': '博客',
     'nav.get_started': '开始学习',
     'footer.about_desc': '自信掌握中文。',
     'footer.quick_links': '快速链接',
     'footer.home': '首页',
+    'footer.blog': '博客',
     'footer.pricing': '价格',
     'footer.contact': '联系我们',
     'footer.rights': '版权所有。',
@@ -59,10 +63,12 @@ export const ui = {
   },
   'zh-tw': {
     'nav.login': '登入',
+    'nav.blog': '部落格',
     'nav.get_started': '開始學習',
     'footer.about_desc': '自信掌握中文。',
     'footer.quick_links': '快速連結',
     'footer.home': '首頁',
+    'footer.blog': '部落格',
     'footer.pricing': '價格',
     'footer.contact': '聯絡我們',
     'footer.rights': '版權所有。',
