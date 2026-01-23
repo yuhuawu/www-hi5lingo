@@ -52,14 +52,14 @@ function getLocalizedPath(targetLang: string) {
 				<a href={`/${lang === defaultLang ? '' : lang}`} class="text-2xl font-bold text-indigo-600">Hi5Lingo</a>
 				<div class="flex items-center space-x-4">
 					<!-- Language Switcher -->
-					<div class="relative group">
-						<button class="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 focus:outline-none py-2">
+					<div class="relative">
+						<button id="lang-menu-button" class="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 focus:outline-none py-2">
 							<span>{languages[lang as keyof typeof languages]}</span>
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
 							</svg>
 						</button>
-						<div class="absolute right-0 mt-0 w-32 bg-white rounded-md shadow-lg py-1 hidden group-hover:block border border-slate-100">
+						<div id="lang-menu-dropdown" class="absolute right-0 mt-0 w-32 bg-white rounded-md shadow-lg py-1 hidden border border-slate-100 z-50">
 							{Object.entries(languages).map(([l, label]) => (
 								<a 
 									href={getLocalizedPath(l)}
@@ -106,5 +106,32 @@ function getLocalizedPath(targetLang: string) {
 				<p>&copy; {new Date().getFullYear()} Hi5Lingo. {t('footer.rights')}</p>
 			</div>
 		</footer>
+
+		<script>
+			const btn = document.getElementById('lang-menu-button');
+			const menu = document.getElementById('lang-menu-dropdown');
+
+			if (btn && menu) {
+				// Toggle menu on button click
+				btn.addEventListener('click', (e) => {
+					e.stopPropagation();
+					menu.classList.toggle('hidden');
+				});
+
+				// Close menu when clicking outside
+				document.addEventListener('click', (e) => {
+					if (!menu.contains(e.target as Node) && !btn.contains(e.target as Node)) {
+						menu.classList.add('hidden');
+					}
+				});
+
+				// Close menu when pressing Escape
+				document.addEventListener('keydown', (e) => {
+					if (e.key === 'Escape') {
+						menu.classList.add('hidden');
+					}
+				});
+			}
+		</script>
 	</body>
 </html>
